@@ -681,6 +681,41 @@
       color: var(--primary-dark);
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js">
+  function downloadExcelDemos() {
+    try {
+      const demosAgendados = JSON.parse(localStorage.getItem('demosAgendados') || '[]');
+      
+      if (demosAgendados.length === 0) {
+        alert('No hay demos agendadas para descargar');
+        return;
+      }
+
+      const headers = ['Nombre', 'Email', 'Empresa', 'Teléfono', 'Cargo', 'Fecha de Solicitud'];
+      const data = demosAgendados.map(demo => [
+        demo.nombre,
+        demo.email,
+        demo.empresa,
+        demo.telefono,
+        demo.cargo,
+        demo.fecha
+      ]);
+
+      const worksheet = XLSX.utils.aoa_to_sheet([headers, ...data]);
+      const colWidths = [20, 25, 25, 20, 20, 25];
+      worksheet['!cols'] = colWidths.map(w => ({ wch: w }));
+
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Demos');
+
+      const fileName = `RECICLARED_Demos_${new Date().toLocaleDateString('es-CO').replace(/\//g, '-')}.xlsx`;
+      XLSX.writeFile(workbook, fileName);
+    } catch (e) {
+      console.error('Error downloading Excel:', e);
+      alert('Error al descargar el archivo Excel');
+    }
+  }
+</script>
 </head>
 <body>
 
@@ -919,7 +954,10 @@
         <p>📅 Agenda una llamada con nuestro equipo para ver una demostración personalizada. Sin compromiso.</p>
       </div>
       <div class="success-message" id="demoSuccess">✓ Solicitud enviada. Te contactaremos pronto.</div>
-      <form action="https://formspree.io/f/mrpbgvpq" method="POST" onsubmit="handleDemoSubmit(event)">
+      <form action="https://formspree.io/f/mrpbgvpq"
+        <input type="hidden" name="_subject" value="demos">
+        <input type="hidden" name="_to" value="juansebastianrobby@gmail.com">
+        <input type="hidden" name="_captcha" value="false"> method="POST" onsubmit="handleDemoSubmit(event)">
         <input type="hidden" name="_subject" value="Nueva Solicitud de Demo - RECICLARED">
         <input type="hidden" name="_captcha" value="false">
         <div class="form-group">
@@ -946,6 +984,7 @@
           <input type="text" name="cargo" id="demoPosition" placeholder="Ej: Responsable HSEQ">
         </div>
         <button type="submit" class="submit-btn">Agendar Demo</button>
+      <button type="button" class="submit-btn" style="background: #FF8C42; margin-top: 0.5rem;" onclick="downloadExcelDemos()">📊 Descargar Excel de Demos</button>
       </form>
     </div>
   </div>
@@ -964,7 +1003,10 @@
         <p>✨ Registra tu cuenta y obtén acceso instantáneo. Podrás gestionar hasta 50 entregas.</p>
       </div>
       <div class="success-message" id="registroSuccess">✓ Cuenta creada. ¡Bienvenido a RECICLARED!</div>
-      <form action="https://formspree.io/f/mrpbgvpq" method="POST" onsubmit="handleRegistroSubmit(event)">
+      <form action="https://formspree.io/f/mrpbgvpq"
+        <input type="hidden" name="_subject" value="demos">
+        <input type="hidden" name="_to" value="juansebastianrobby@gmail.com">
+        <input type="hidden" name="_captcha" value="false"> method="POST" onsubmit="handleRegistroSubmit(event)">
         <input type="hidden" name="_subject" value="Nuevo Registro de Usuario - RECICLARED">
         <input type="hidden" name="tipo_solicitud" value="Registro de Cuenta">
         <input type="hidden" name="_captcha" value="false">
@@ -1022,7 +1064,10 @@
         <p>⏰ Lunes a Viernes 8:00 AM - 6:00 PM</p>
       </div>
       <div class="success-message" id="contactoSuccess">✓ Mensaje enviado. Te contactaremos pronto.</div>
-      <form action="https://formspree.io/f/mrpbgvpq" method="POST" onsubmit="handleContactoSubmit(event)">
+      <form action="https://formspree.io/f/mrpbgvpq"
+        <input type="hidden" name="_subject" value="demos">
+        <input type="hidden" name="_to" value="juansebastianrobby@gmail.com">
+        <input type="hidden" name="_captcha" value="false"> method="POST" onsubmit="handleContactoSubmit(event)">
         <input type="hidden" name="_subject" value="Consulta de Ventas - RECICLARED">
         <input type="hidden" name="tipo_solicitud" value="Contacto/Consulta">
         <input type="hidden" name="_captcha" value="false">
@@ -1567,6 +1612,40 @@
         element.scrollIntoView({ behavior: 'smooth' });
       }
     }, 100);
+  }
+
+  function downloadExcelDemos() {
+    try {
+      const demosAgendados = JSON.parse(localStorage.getItem('demosAgendados') || '[]');
+      
+      if (demosAgendados.length === 0) {
+        alert('No hay demos agendadas para descargar');
+        return;
+      }
+
+      const headers = ['Nombre', 'Email', 'Empresa', 'Teléfono', 'Cargo', 'Fecha de Solicitud'];
+      const data = demosAgendados.map(demo => [
+        demo.nombre,
+        demo.email,
+        demo.empresa,
+        demo.telefono,
+        demo.cargo,
+        demo.fecha
+      ]);
+
+      const worksheet = XLSX.utils.aoa_to_sheet([headers, ...data]);
+      const colWidths = [20, 25, 25, 20, 20, 25];
+      worksheet['!cols'] = colWidths.map(w => ({ wch: w }));
+
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Demos');
+
+      const fileName = `RECICLARED_Demos_${new Date().toLocaleDateString('es-CO').replace(/\//g, '-')}.xlsx`;
+      XLSX.writeFile(workbook, fileName);
+    } catch (e) {
+      console.error('Error downloading Excel:', e);
+      alert('Error al descargar el archivo Excel');
+    }
   }
 </script>
 
